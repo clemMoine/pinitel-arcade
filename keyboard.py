@@ -9,12 +9,12 @@
 
 import RPi.GPIO as GPIO
 import uinput
-from evdev import UInput, ecodes as e
+from evdev import UInput, ecodes
 import time
 from os import system
 
 # Load kernal module
-system("modprobe uinput")
+system("modprobe evdev")
 
 # Initialize GPIO with physical board pin number
 GPIO.setmode(GPIO.BOARD)
@@ -39,15 +39,15 @@ keyboardMatrix = [
 # Associated keys and events
 # https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h#L74
 keysAssociation = {
-    "Espace": uinput.KEY_SPACE,
-    "#": uinput.KEY_NUMERIC_POUND, "3": uinput.KEY_3, "6": uinput.KEY_6, "?": uinput.KEY_QUESTION, "I": uinput.KEY_I, "O": uinput.KEY_O, "9": uinput.KEY_9, "X": uinput.KEY_X,
-    "0": uinput.KEY_0, "2": uinput.KEY_2, "5": uinput.KEY_5, ":": uinput.KEY_EQUAL, "U": uinput.KEY_U, "P": uinput.KEY_P, "8": uinput.KEY_8, "C": uinput.KEY_C,
-    "*": uinput.KEY_KPASTERISK, "1": uinput.KEY_1, "4": uinput.KEY_4, "-": uinput.KEY_MINUS, "Y": uinput.KEY_Y, "M": uinput.KEY_M, "7": uinput.KEY_7, "V": uinput.KEY_V,
-    "⏎": uinput.KEY_ENTER, "Répétition": uinput.KEY_F6, "Envoi": uinput.KEY_F9, ";": uinput.KEY_SEMICOLON, "T": uinput.KEY_T, "K": uinput.KEY_K, "L": uinput.KEY_L, "Maj. D": uinput.KEY_RIGHTSHIFT,
-    "→": uinput.KEY_RIGHT, "Retour": uinput.KEY_F5, "Suite": uinput.KEY_F8, "'": uinput.KEY_APOSTROPHE, "R": uinput.KEY_R, "H": uinput.KEY_H, "J": uinput.KEY_J, "N": uinput.KEY_N,
-    "←": uinput.KEY_LEFT, "Annulation": uinput.KEY_F4, "Correction": uinput.KEY_BACKSPACE, ".": uinput.KEY_DOT, "E": uinput.KEY_E, "F": uinput.KEY_F, "G": uinput.KEY_G, "B": uinput.KEY_B,
-    "↓": uinput.KEY_DOWN, "Sommaire": uinput.KEY_F3, "Guide": uinput.KEY_F7, ",": uinput.KEY_COMMA, "Z": uinput.KEY_Z, "S": uinput.KEY_S, "D": uinput.KEY_D, "W": uinput.KEY_W,
-    "↑": uinput.KEY_UP, "Fnct": uinput.KEY_F2, "Connexion / Fin": uinput.KEY_F1, "Esc": uinput.KEY_ESC, "A": uinput.KEY_A, "Ctrl": uinput.KEY_LEFTCTRL, "Q": uinput.KEY_Q, "Maj. G": uinput.KEY_LEFTSHIFT,
+    "Espace": ecodes.KEY_SPACE,
+    "#": ecodes.KEY_NUMERIC_POUND, "3": ecodes.KEY_3, "6": ecodes.KEY_6, "?": ecodes.KEY_QUESTION, "I": ecodes.KEY_I, "O": ecodes.KEY_O, "9": ecodes.KEY_9, "X": ecodes.KEY_X,
+    "0": ecodes.KEY_0, "2": ecodes.KEY_2, "5": ecodes.KEY_5, ":": ecodes.KEY_EQUAL, "U": ecodes.KEY_U, "P": ecodes.KEY_P, "8": ecodes.KEY_8, "C": ecodes.KEY_C,
+    "*": ecodes.KEY_KPASTERISK, "1": ecodes.KEY_1, "4": ecodes.KEY_4, "-": ecodes.KEY_MINUS, "Y": ecodes.KEY_Y, "M": ecodes.KEY_M, "7": ecodes.KEY_7, "V": ecodes.KEY_V,
+    "⏎": ecodes.KEY_ENTER, "Répétition": ecodes.KEY_F6, "Envoi": ecodes.KEY_F9, ";": ecodes.KEY_SEMICOLON, "T": ecodes.KEY_T, "K": ecodes.KEY_K, "L": ecodes.KEY_L, "Maj. D": ecodes.KEY_RIGHTSHIFT,
+    "→": ecodes.KEY_RIGHT, "Retour": ecodes.KEY_F5, "Suite": ecodes.KEY_F8, "'": ecodes.KEY_APOSTROPHE, "R": ecodes.KEY_R, "H": ecodes.KEY_H, "J": ecodes.KEY_J, "N": ecodes.KEY_N,
+    "←": ecodes.KEY_LEFT, "Annulation": ecodes.KEY_F4, "Correction": ecodes.KEY_BACKSPACE, ".": ecodes.KEY_DOT, "E": ecodes.KEY_E, "F": ecodes.KEY_F, "G": ecodes.KEY_G, "B": ecodes.KEY_B,
+    "↓": ecodes.KEY_DOWN, "Sommaire": ecodes.KEY_F3, "Guide": ecodes.KEY_F7, ",": ecodes.KEY_COMMA, "Z": ecodes.KEY_Z, "S": ecodes.KEY_S, "D": ecodes.KEY_D, "W": ecodes.KEY_W,
+    "↑": ecodes.KEY_UP, "Fnct": ecodes.KEY_F2, "Connexion / Fin": ecodes.KEY_F1, "Esc": ecodes.KEY_ESC, "A": ecodes.KEY_A, "Ctrl": ecodes.KEY_LEFTCTRL, "Q": ecodes.KEY_Q, "Maj. G": ecodes.KEY_LEFTSHIFT,
 }
 
 # Class Keyboard Configure
@@ -55,6 +55,7 @@ keysAssociation = {
 # Listen to rows as an input
 class KeyboardConfigure:
     def __init__(self, device, columns, rows, matrix, keys):
+        self.previousKeys = list()
         self.columns = columns
         self.device = device
         self.matrix = matrix
@@ -75,18 +76,30 @@ class KeyboardConfigure:
 
         # Infinite loop
         while True:
-            self.onKeyPress()
+            self.listenKeyboard()
 
-    def onKeyPress(self):
-        (name, value) = self.getKey()
+    def onKeyDown(self, name, value, row, column):
+        # Debug
+        # print("[{row}:{column}] = {key}".format(row = rowIndex, column = columnIndex, key = name))
 
-        if value is not None:
-            self.device.emit_click(value)
+        # Previous state of the key
+        previouslyPressed = name in self.previousKeys
 
-    def getKey(self):
-        name = None
-        value = None
+        # Emit the keydown
+        self.device.write(ecodes.EV_KEY, value, 1)
+        self.device.syn()
+        self.previousKeys.append(name)
 
+    def onKeyUp(self, name, value, row, column):
+        # Debug
+        # print("[{row}:{column}] = {key}".format(row = rowIndex, column = columnIndex, key = name))
+
+        # Emit the keyup
+        self.device.write(ecodes.EV_KEY, value, 0)
+        self.device.syn()
+        self.previousKeys.remove(name)
+
+    def listenKeyboard(self):
         # For each columns as output
         for columnIndex, columnPin in enumerate(self.columns):
             # Start listening to the column pin
@@ -94,23 +107,22 @@ class KeyboardConfigure:
 
             # For each rows as input
             for rowIndex, rowPin in enumerate(self.rows):
+                # Get the pressed key name and value
+                name = self.matrix[rowIndex][columnIndex]
+                value = self.keys.get(name)
+
                 # Get the state of the row pin to know if a key is pressed on this column:row
                 if GPIO.input(rowPin) == GPIO.LOW:
-                    # Get the pressed key name and value
-                    name = self.matrix[rowIndex][columnIndex]
-                    value = self.keys.get(name)
-
-                    # Debug
-                    # print("[{row}:{column}] = {key}".format(row = rowIndex, column = columnIndex, key = name))
-                    break
+                    self.onKeyDown(name, value, row = rowIndex, column = columnIndex)
+                elif name in self.previousKeys:
+                    self.onKeyUp(name, value, row = rowIndex, column = columnIndex)
 
             # Stop listening to the line
             GPIO.output(columnPin, GPIO.HIGH)
 
-        return name, value
-
 # Create the UI input device
-device = uinput.Device(list(keysAssociation.values()))
+# device = uinput.Device(list(keysAssociation.values()))
+device = UInput()
 
 try:
     print('[+] Minitel Keyboard driver')
@@ -120,7 +132,7 @@ try:
 except KeyboardInterrupt:
     print('[-] Minitel Keyboard driver')
     # Destroy the device
-    device.destroy()
+    # device.destroy()
 
     # Clean the GPIO state on kill
     GPIO.cleanup() 
