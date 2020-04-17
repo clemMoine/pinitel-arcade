@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!-- Created with Fritzing (http://www.fritzing.org/) -->
+<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.2' baseProfile='tiny' x='0in' y='0in' width='0.447056in' height='0.558861in' viewBox='0 0 32.188 40.238' >
+<g partID='854193140'><g xmlns="http://www.w3.org/2000/svg" id="copper0">
+ <circle xmlns="http://www.w3.org/2000/svg" cx="29.65" cy="32.7" stroke="none" id="nonconn10" r="1.37" stroke-width="0"/>
+ <circle xmlns="http://www.w3.org/2000/svg" cx="29.65" cy="35.53" stroke="none" id="nonconn9" r="1.37" stroke-width="0"/>
+ <circle xmlns="http://www.w3.org/2000/svg" cx="29.65" cy="34.07" stroke="none" id="nonconn8" r="1.37" stroke-width="0"/>
+ <rect xmlns="http://www.w3.org/2000/svg" id="connector0pad" x="27.88" y="30.93" width="3.54" height="6.38" rx="1.77" fill="none" stroke="#f7bd13" stroke-width="1.44"/>
+ <circle xmlns="http://www.w3.org/2000/svg" cx="12.86" cy="11.44" stroke="none" id="nonconn7" r="1.37" stroke-width="0"/>
+ <circle xmlns="http://www.w3.org/2000/svg" cx="15.69" cy="11.44" stroke="none" id="nonconn6" r="1.37" stroke-width="0"/>
+ <circle xmlns="http://www.w3.org/2000/svg" cx="14.28" cy="11.44" stroke="none" id="nonconn5" r="1.37" stroke-width="0"/>
+ <rect xmlns="http://www.w3.org/2000/svg" id="connector1pad" x="11.09" y="9.67" width="6.38" height="3.54" rx="1.77" fill="none" stroke="#f7bd13" stroke-width="1.44"/>
+ <circle xmlns="http://www.w3.org/2000/svg" cx="3.757" cy="11.651" stroke="none" id="nonconn2" r="2.409" stroke-width="0"/>
+ <circle xmlns="http://www.w3.org/2000/svg" cx="25.016" cy="11.651" stroke="none" id="nonconn3" r="2.41" stroke-width="0"/>
+ <circle xmlns="http://www.w3.org/2000/svg" cx="14.387" cy="30.077" stroke="none" id="nonconn4" r="2.835" stroke-width="0"/>
+</g>
+</g><g partID='854193141'><g xmlns="http://www.w3.org/2000/svg" id="copper1">
+ <g xmlns="http://www.w3.org/2000/svg" id="copper0">
+  <circle xmlns="http://www.w3.org/2000/svg" cx="29.65" cy="32.7" stroke="none" id="nonconn10" r="1.37" stroke-width="0"/>
+  <circle xmlns="http://www.w3.org/2000/svg" cx="29.65" cy="35.53" stroke="none" id="nonconn9" r="1.37" stroke-width="0"/>
+  <circle xmlns="http://www.w3.org/2000/svg" cx="29.65" cy="34.07" stroke="none" id="nonconn8" r="1.37" stroke-width="0"/>
+  <rect xmlns="http://www.w3.org/2000/svg" id="connector0pad" x="27.88" y="30.93" width="3.54" height="6.38" rx="1.77" fill="none" stroke="#f7bd13" stroke-width="1.44"/>
+  <circle xmlns="http://www.w3.org/2000/svg" cx="12.86" cy="11.44" stroke="none" id="nonconn7" r="1.37" stroke-width="0"/>
+  <circle xmlns="http://www.w3.org/2000/svg" cx="15.69" cy="11.44" stroke="none" id="nonconn6" r="1.37" stroke-width="0"/>
+  <circle xmlns="http://www.w3.org/2000/svg" cx="14.28" cy="11.44" stroke="none" id="nonconn5" r="1.37" stroke-width="0"/>
+  <rect xmlns="http://www.w3.org/2000/svg" id="connector1pad" x="11.09" y="9.67" width="6.38" height="3.54" rx="1.77" fill="none" stroke="#f7bd13" stroke-width="1.44"/>
+  <circle xmlns="http://www.w3.org/2000/svg" cx="3.757" cy="11.651" stroke="none" id="nonconn2" r="2.409" stroke-width="0"/>
+  <circle xmlns="http://www.w3.org/2000/svg" cx="25.016" cy="11.651" stroke="none" id="nonconn3" r="2.41" stroke-width="0"/>
+  <circle xmlns="http://www.w3.org/2000/svg" cx="14.387" cy="30.077" stroke="none" id="nonconn4" r="2.835" stroke-width="0"/>
+ </g>
+</g>
+</g><g partID='854193142'><g xmlns="http://www.w3.org/2000/svg" id="silkscreen">
+ <polyline xmlns="http://www.w3.org/2000/svg" points="28.63,38.488,28.63,39.999,0.283,39.999,0.283,0.314,28.63,0.314,28.63,29.904" stroke="#F0F0F0" fill="none" stroke-linecap="round" stroke-width="0.2032"/>
+</g>
+</g></svg>
