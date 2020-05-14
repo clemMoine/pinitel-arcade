@@ -11,6 +11,7 @@ import RPi.GPIO as GPIO
 import uinput
 from evdev import UInput, ecodes
 import time
+import locale
 from os import system
 
 # Load kernal module
@@ -20,7 +21,7 @@ system("modprobe evdev")
 GPIO.setmode(GPIO.BOARD)
 
 # Keyboard lines GPIO association
-rows = [8, 10, 12, 16, 18, 22, 24, 26, 32]
+rows = [8, 10, 23, 16, 18, 22, 24, 26, 32]
 columns = [36, 38, 40, 7, 11, 13, 15, 19, 21]
 
 # Mapping matrix keyboard layout
@@ -127,10 +128,15 @@ device = UInput()
 try:
     print('[+] Minitel Keyboard driver')
 
+    # Set the locales
+    locale.setlocale(locale.LC_ALL, 'en_GB.utf8')
+    print('[+] Locale set to {locale}'.format(locale = locale.getlocale()))
+
     # Configure the GPIO pins
     KeyboardConfigure(device, columns, rows, matrix = keyboardMatrix, keys = keysAssociation)
 except KeyboardInterrupt:
     print('[-] Minitel Keyboard driver')
+
     # Destroy the device
     # device.destroy()
 
